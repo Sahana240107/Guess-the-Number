@@ -1,0 +1,143 @@
+var compGuess
+var score;
+var guessNo=0;
+var result=document.getElementById("correct");
+var user=document.getElementById("guess");
+var scorevar=document.getElementById("scoreId");
+var hint=document.getElementById("hint");
+function factor(num)
+{
+    if(num%3==0)
+        return "Number is divisible by 3";
+    else if(num%5==0)
+        return "Number is divisible by 5";
+    else if(num%7==0)
+        return "Number is divisible by 7";
+    else 
+        return "Number is not divisible by 3,5,7";
+}
+function isEven(num)
+{
+    if(num%2==0)
+        return "Number is even";
+    else 
+        return "Number is odd";
+}
+function lessthan50(num)
+{
+    if(num<50)
+        return "Number is less than 50" ;
+    else
+        return "Number is not less than 50";
+}
+function isPrime(num)
+{
+    var flag=true;
+    for(let i=2;i<num/2;i++)
+    {
+        if(num%i==0)
+            flag=false;
+    }
+    if(flag)
+        return "Number is prime";
+    else
+        return "Number is not prime";
+}
+function digitSum(num)
+{
+    var s=num.toString();
+    return `Sum of digits is ${Number(s[0])+Number(s[1])}`;
+}
+function digitSame(num)
+{
+    let s=num.toString();
+    if(s.length==2)
+    {
+        if(s[0]==s[1])
+            return "Number have same digits";
+    }
+    return "Number have different digits";
+}
+function digitCount(num)
+{
+    let s=num.toString();
+    if(s.length==1)
+        return "Number has only 1 digit";
+    else if(s.length==2)
+        return "Number has two digits";
+    else 
+        return "Number has more than two digits";
+}
+function perfectSquare(num)
+{
+    var sqrt=Math.sqrt(num);
+    if(sqrt==Math.floor(sqrt))
+    {
+        return "Number is a perfect square";
+    }
+    return "Number is not a perfect square";
+}
+function isClose(num,user)
+{
+    let diff=Math.abs(user-num);
+    if(diff<=10)
+        return "Your guess is close";
+    else if(user<num)
+        return "Your guess is too low";
+    else
+        return "Your guess is too high";
+}
+function interval(num)
+{
+    if(num>10)
+    return `Number is between ${num-10} and ${num+10}`;
+    else 
+        return "Number is between 1 to 10";
+}
+window.onload=function()
+{
+    again()
+}
+function again()
+{
+    compGuess=Math.floor(Math.random()*100)+1
+    score=10
+    user.value=""
+    result.innerHTML=""
+    scorevar.innerHTML="Score:"+score;
+    hint.innerHTML="";
+    hints = [isEven, factor, lessthan50, isPrime, perfectSquare, digitSame, digitCount, digitSum, isClose, interval];
+}
+function checkGuess()
+{
+    var userGuess=Number(user.value);
+    if(userGuess==compGuess)
+    {
+        result.innerHTML=`Congrats! You guessed it in ${guessNo} guesses! Click play again for new game`;
+    }
+    else
+    {
+        result.innerHTML="Your guess in wrong!";
+        score--;
+        scorevar.innerHTML="Score:"+score;
+        guessNo++;
+        giveHint(compGuess,userGuess);
+    }
+    if(score<=0)
+    {
+        result.innerHTML="Game Over! The number was "+compGuess;
+    }
+}
+function giveHint(compGuess,userGuess)
+{
+    if(hints.length>0)
+    {
+        let randomIndex=Math.floor(Math.random()*hints.length);
+        let chosenfun=hints[randomIndex];
+        if(chosenfun==isClose)
+            hint.innerHTML+=`<p>${chosenfun(compGuess,userGuess)}<p>`;
+        else 
+        hint.innerHTML+=`<p>${chosenfun(compGuess)}<p>`;
+        hints.splice(randomIndex,1);
+    }
+}
