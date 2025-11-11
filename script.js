@@ -89,8 +89,10 @@ function isClose(num,user)
 }
 function interval(num)
 {
-    if(num>10)
+    if(num>10 && num+10<100)
     return `Number is between ${num-10} and ${num+10}`;
+    else if(num+10>100)
+        return `Number is between ${num-10} and 100`;
     else 
         return "Number is between 1 to 10";
 }
@@ -114,6 +116,7 @@ function checkGuess()
     if(userGuess==compGuess)
     {
         result.innerHTML=`Congrats! You guessed it in ${guessNo} guesses! Click play again for new game`;
+        hint.innerHTML="";
     }
     else
     {
